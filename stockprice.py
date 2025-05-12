@@ -80,27 +80,50 @@ scaled_features = scaler.fit_transform(df_processed[feature_columns])
 scaled_target = scaler.fit_transform(df_processed[[target_column]])
 
 # Create sequences for LSTM
-# def create_sequences(data, target, seq_length=60):
-#     X, y = [], []
-#     for i in range(len(data) - seq_length):
-#         X.append(data[i:(i + seq_length)])
-#         y.append(target[i + seq_length])
-#     return np.array(X), np.array(y)
+# This function creates sequences of historical data points for LSTM training
+def create_sequences(data, target, seq_length=60):
+    X, y = [], []
+    # Loop through the data, creating sequences of length 'seq_length'
+    # Each sequence will be used to predict the next target value
+    for i in range(len(data) - seq_length):
+        # Create sequence of 'seq_length' time steps (e.g. 60 days of features)
+        X.append(data[i:(i + seq_length)])
+        # The target is the next value after the sequence
+        y.append(target[i + seq_length])
+    # Convert lists to numpy arrays for model training
+    return np.array(X), np.array(y)
 
-# seq_length = 60
-# X, y = create_sequences(scaled_features, scaled_target, seq_length)
+# Use 60 days of historical data to predict the next day
+seq_length = 60
+# Create sequences from our scaled feature and target data
+# X will have shape (num_sequences, seq_length, num_features)
+# y will have shape (num_sequences, 1) containing the target values
+X, y = create_sequences(scaled_features, scaled_target, seq_length)
 
-# # Split data into train and test sets
-# train_size = int(len(X) * 0.8)
-# X_train, X_test = X[:train_size], X[train_size:]
-# y_train, y_test = y[:train_size], y[train_size:]
+# Split data into train and test sets
+train_size = int(len(X) * 0.8)
+X_train, X_test = X[:train_size], X[train_size:]
+y_train, y_test = y[:train_size], y[train_size:]
 
 # Build LSTM model
+# Build a sequential LSTM model for time series prediction
 model = Sequential([
+    # First LSTM layer with 100 units
+    # return_sequences=True allows output to be fed into next LSTM layer
+    # input_shape specifies the expected input dimensions: (sequence length, number of features)
     LSTM(100, return_sequences=True, input_shape=(seq_length, len(feature_columns))),
+    
+    # Dropout layer to prevent overfitting by randomly dropping 20% of units
     Dropout(0.2),
+    
+    # Second LSTM layer with 50 units
+    # return_sequences=False since this is the last LSTM layer
     LSTM(50, return_sequences=False),
+    
+    # Another dropout layer
     Dropout(0.2),
+    
+    # Final dense layer with 1 output unit for price prediction
     Dense(1)
 ])
 

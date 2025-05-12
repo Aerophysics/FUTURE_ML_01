@@ -68,37 +68,58 @@ This project helps predict whether a stock's price will go up or down in the fut
 
 ## 🤖 Project 3: Customer Support Chatbot
 
-### What Does This Project Do?
-This project creates a smart chatbot that can help answer customer questions automatically. It's like having a robot customer service representative!
+This project implements a customer support chatbot using both Naive Bayes and LSTM models for ticket classification. The chatbot is accessible through a Streamlit web interface.
 
-### How Does It Work?
-1. **Data Collection**:
-   - We get real customer support tickets
-   - The data includes questions and their answers
+### Features
 
-2. **Data Processing**:
-   - We clean up the text (remove special characters, make everything lowercase)
-   - We convert words into numbers that computers can understand
-   - We organize the data into different types of questions
+- Dual model approach (Naive Bayes and LSTM) for ticket classification
+- Real-time chat interface using Streamlit
+- Support for various types of customer inquiries
+- Beautiful and responsive UI
+- Chat history tracking
 
-3. **Making Predictions**:
-   - We use two different methods:
-     1. Naive Bayes (a simple but effective method)
-     2. LSTM (a more complex but powerful method)
-   - Both methods learn to understand customer questions
-   - They predict what type of question it is
-   - They suggest appropriate answers
+### Setup
 
-4. **Results**:
-   - We can see how accurate each method is
-   - We create visual graphs to show the results
-   - We save all predictions in files for easy viewing
+1. Install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-### Files Created:
-- `nb_confusion_matrix.png`: Shows how accurate the simple method is
-- `lstm_confusion_matrix.png`: Shows how accurate the complex method is
-- `lstm_training_history.png`: Shows how the complex method learned
-- `chatbot_predictions.csv`: Contains all the predictions
+2. Run the model training script first:
+```bash
+python chatbot.py
+```
+
+3. Launch the Streamlit app:
+```bash
+streamlit run app.py
+```
+
+### Usage
+
+1. Open your web browser and navigate to the URL shown in the terminal (typically http://localhost:8501)
+2. Type your customer support query in the text input field
+3. The chatbot will process your query and provide a response based on the classification
+
+### Project Structure
+
+- `chatbot.py`: Script for training and saving the machine learning models
+- `app.py`: Streamlit web interface for the chatbot
+- `requirements.txt`: List of Python dependencies
+- `README.md`: Project documentation
+
+### Model Information
+
+The chatbot uses two models for classification:
+1. Naive Bayes: Fast and efficient for text classification
+2. LSTM: Deep learning model for better understanding of context and sequence
+
+The models are trained on a customer support ticket dataset and can classify queries into different categories such as:
+- Technical Support
+- Billing Issues
+- Product Information
+- Account Management
+- General Inquiries
 
 ## 🛠️ How to Run These Projects
 
